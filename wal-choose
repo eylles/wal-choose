@@ -274,5 +274,3 @@ else
     echo "selected image: ${selection}"
     $wal_img_cmd "${selection}"
 fi
-
-
