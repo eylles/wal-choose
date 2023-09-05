@@ -133,8 +133,27 @@ wal_thm_cmd='wal --theme'
 lastusedthemefile="${XDG_CACHE_HOME:-$HOME/.cache}/wal/last_used_theme"
 lastthemestr=$(cat "$lastusedthemefile")
 lasttheme="${XDG_CACHE_HOME:-$HOME/.cache}/wal/schemes/${lastthemestr}"
+config_dir="${XDG_CONFIG_HOME:-~/.config}/wal-choose"
+config_file="${config_dir}/configrc"
 
-. ~/.config/wal-choose/configrc
+if [ -f "$config_file" ]; then
+    . "$config_file"
+else
+    if [ ! -d "$config_dir" ]; then
+        mkdir -p "$config_dir"
+    fi
+    cat <<___CONFIG > "$config_file"
+# default config
+# wal-choose allows to change the commands used for building and applying
+# themes, this is so to allow custom wrappers for pywal like the one i use.
+
+# wal -i command
+wal_img_cmd='wal -i'
+# wal --theme command
+wal_thm_cmd='wal --theme'
+___CONFIG
+fi
+
 # echo "$lastthemestr"
 # cat "$lasttheme"
 # echo
