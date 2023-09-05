@@ -14,7 +14,6 @@ make install
 
 ## screenshot
 
-running inside awesomewm on the wibar
 
 <img src="./Screenshot.png" width="800">
 
