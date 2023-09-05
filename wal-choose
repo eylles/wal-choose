@@ -35,6 +35,7 @@ function start_ueberzug {
     # prevent EOF
     3>"${UEBERZUG_FIFO}" \
         exec
+    ueberzug_pid=$!
 }
 
 
