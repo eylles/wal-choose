@@ -142,7 +142,8 @@ lasttheme="${XDG_CACHE_HOME:-$HOME/.cache}/wal/schemes/${lastthemestr}"
 
 if [ -z "$WAL_CHOOSE_COLORS" ]; then
     WAL_CHOOSE_COLORS="--color=fg:15,bg:0,hl:10,fg+:15,bg+:8,hl+:12 \
-    --color=info:10,prompt:13,pointer:12,marker:12,spinner:14,header:4"
+    --color=info:10,prompt:13,pointer:12,marker:12,spinner:14,header:4 \
+    --color=scrollbar:12"
 fi
 
 if [ -z "$WAL_CHOOSE_OPTS" ]; then
