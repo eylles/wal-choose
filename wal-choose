@@ -156,6 +156,74 @@ if [ -z "$WAL_CHOOSE_OPTS" ]; then
      --bind alt-j:preview-down"
 fi
 
+# usage: 
+# wiht one arg:
+#     import_test "library"
+#     will run as: import library
+# wiht two arg:
+#     import_test "library" "module"
+#     will run as: from library import module
+import_test() {
+if [ -n "$2" ]; then
+    library="$1"
+    module="$2"
+    python3 - <<___HEREDOC
+import sys
+try:
+    from $library import $module
+except ImportError:
+    sys.exit(1)
+___HEREDOC
+else
+    library="$1"
+    python3 - <<___HEREDOC
+import sys
+try:
+    import $library
+except ImportError:
+    sys.exit(1)
+___HEREDOC
+fi
+}
+
+
+backend_schemer=""
+backend_colorthief=""
+backend_colorz=""
+backend_fast_colorthief=""
+backend_haishoku=""
+backend_list='wal'
+
+
+which schemer2 >/dev/null
+backend_schemer=$?
+[ "$backend_schemer" = 0 ] && backend_list="${backend_list}"' schemer2'
+
+import_test "colorthief" "ColorThief"
+backend_colorthief=$?
+[ "$backend_colorthief" = 0 ] && backend_list="${backend_list}"' colorthief'
+
+import_test "colorz"
+backend_colorz=$?
+[ "$backend_colorz" = 0 ] && backend_list="${backend_list}"' colorz'
+
+import_test "fast_colorthief"
+backend_fast_colorthief=$?
+[ "$backend_fast_colorthief" = 0 ] && backend_list="${backend_list}"' fast_colorthief'
+
+import_test "haishoku.haishoku" "Haishoku"
+backend_haishoku=$?
+[ "$backend_haishoku" = 0 ] && backend_list="${backend_list}"' haishoku'
+
+choos_backend() {
+    backend_sel=""
+    backend_sel=$(printf '%s\n' ${backend_list} | fzf)
+    if [ -z "$backend_sel" ]; then
+        backend_sel="wal"
+    fi
+}
+
+
 export FZF_DEFAULT_OPTS="${WAL_CHOOSE_OPTS} ${WAL_CHOOSE_COLORS}"
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
