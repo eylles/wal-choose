@@ -227,6 +227,13 @@ choos_backend() {
 
 export FZF_DEFAULT_OPTS="${WAL_CHOOSE_OPTS} ${WAL_CHOOSE_COLORS}"
 
+dir=""
+if [ -z "$1" ]; then
+    dir="$PWD"
+else
+    dir="$1"
+fi
+
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     trap finalise EXIT
     # print the redraw key twice as there's a run condition we can't circumvent
@@ -241,8 +248,8 @@ fi
 choose_wal() {
     start_ueberzug
     SHELL="${BASH_BINARY}" \
-    selection=$(find -L "$PWD" -maxdepth 1 -type f -print | is_img_extension | sort -V | \
-    fzf --ansi --keep-right --header "wal-choose: choose wallpaper from files in $([[ -z $1 ]] && echo $PWD || realpath $1)" \
+    selection=$(find -L "$dir" -maxdepth 1 -type f -print | is_img_extension | sort -V | \
+    fzf --ansi --keep-right --header "wal-choose: choose wallpaper from files in $dir" \
     --preview "wal --backend $backend_sel --cols16 -i {} -n -q; wal --preview | sed -n '2,$ p'; awk '{print \$2,\$3,\$4,\$5,\$6,\$7}'; [[ \$(file --mime {}) =~ svg ]] && svg_preview {} || draw_preview {}" \
     --preview-window "${DEFAULT_PREVIEW_POSITION}" \
     --bind "${REDRAW_KEY}:${REDRAW_COMMAND}")
