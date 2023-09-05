@@ -16,5 +16,5 @@ make install
 
 running inside awesomewm on the wibar
 
-<img src="./screenshot.png" width="800">
+<img src="./Screenshot.png" width="800">
 
