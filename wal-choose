@@ -206,6 +206,17 @@ ___HEREDOC
 fi
 }
 
+# usage: prettyp "$1" "$2" "$3"
+# result: [1] 2: 3
+prettyp() {
+    if [ -n "$3" ]; then
+        printf '[\033[1;32m%s\033[0m] \033[1;31m%s\033[0m: %s\n' "$1" "$2" "$3"
+    else
+        printf '[\033[1;32m%s\033[0m] %s\n' "$1" "$2"
+    fi
+}
+
+myname="${0##*/}"
 
 backend_schemer=""
 backend_colorthief=""
@@ -294,10 +305,10 @@ while [ "$NO_CONTINUE" -ne 0 ]; do
 done
 
 if [ -z "$selection" ]; then
-    echo "selection empty"
-    echo "last theme will be used"
+    prettyp "$myname" "selection empty"
+    prettyp "$myname" "last theme will be used"
     $wal_thm_cmd "${lasttheme}"
 else
-    echo "selected image: ${selection}"
+    prettyp "$myname" "selected image" "${selection}"
     $wal_img_cmd "${selection}"
 fi
