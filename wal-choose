@@ -130,6 +130,8 @@ function print_on_winch {
 wal_img_cmd='wal -i'
 #  default: wal --theme
 wal_thm_cmd='wal --theme'
+#  default: darken
+colsmethod=darken
 lastusedthemefile="${XDG_CACHE_HOME:-$HOME/.cache}/wal/last_used_theme"
 lastthemestr=$(cat "$lastusedthemefile")
 lasttheme="${XDG_CACHE_HOME:-$HOME/.cache}/wal/schemes/${lastthemestr}"
@@ -151,6 +153,9 @@ else
 wal_img_cmd='wal -i'
 # wal --theme command
 wal_thm_cmd='wal --theme'
+# wal --cols16 method
+# available: darken, lighten
+colsmethod=darken
 ___CONFIG
 fi
 
@@ -280,7 +285,9 @@ choose_wal() {
     SHELL="${BASH_BINARY}" \
     selection=$(find -L "$dir" -maxdepth 1 -type f -print | is_img_extension | sort -V | \
     fzf --ansi --keep-right --header "wal-choose: choose wallpaper from files in $dir" \
-    --preview "wal --backend $backend_sel --cols16 -i {} -n -q; wal --preview | sed -n '2,$ p'; awk '{print \$2,\$3,\$4,\$5,\$6,\$7}'; [[ \$(file --mime {}) =~ svg ]] && svg_preview {} || draw_preview {}" \
+    --preview "wal --backend $backend_sel --cols16 $colsmethod -i {} -n -q; wal --preview \
+    | sed -n '2,$ p'; awk '{print \$2,\$3,\$4,\$5,\$6,\$7}'; \
+    [[ \$(file --mime {}) =~ svg ]] && svg_preview {} || draw_preview {}" \
     --preview-window "${DEFAULT_PREVIEW_POSITION}" \
     --bind "${REDRAW_KEY}:${REDRAW_COMMAND}")
     kill "$ueberzug_pid"
