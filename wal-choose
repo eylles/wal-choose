@@ -29,7 +29,12 @@ declare -r -x PREVIEW_ID="preview"
 
 
 function start_ueberzug {
-    mkfifo "${UEBERZUG_FIFO}"
+    if [ ! -p "${UEBERZUG_FIFO}" ]; then
+        if [ -f "${UEBERZUG_FIFO}" ]; then
+            rm "${UEBERZUG_FIFO}"
+        fi
+        mkfifo "${UEBERZUG_FIFO}"
+    fi
     <"${UEBERZUG_FIFO}" \
         ueberzug layer --parser bash --silent &
     # prevent EOF
