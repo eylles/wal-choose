@@ -137,6 +137,9 @@ wal_img_cmd='wal -i'
 wal_thm_cmd='wal --theme'
 #  default: darken
 colsmethod=darken
+# should the program set the wallpaper as a preview
+#  default: no
+prevwpp="no"
 lastusedthemefile="${XDG_CACHE_HOME:-$HOME/.cache}/wal/last_used_theme"
 lastthemestr=$(cat "$lastusedthemefile")
 lasttheme="${XDG_CACHE_HOME:-$HOME/.cache}/wal/schemes/${lastthemestr}"
@@ -161,6 +164,13 @@ wal_thm_cmd='wal --theme'
 # wal --cols16 method
 # available: darken, lighten
 colsmethod=darken
+# preview wallpaper
+# valid value:
+# case insensitive
+# no, n, 0, false, EMPTY
+# yes, y, 1, true
+# anything else will be interpreted as false
+prevwpp="no"
 ___CONFIG
 fi
 
@@ -285,12 +295,25 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     export -f draw_preview svg_preview calculate_position
 fi
 
+# wallpaper preview arg
+# will be either "-n" or empty
+wppv_arg=""
+
+case $prevwpp in
+    [Yy][Ee][Ss]|[Yy]|1|[Tt][Rr][Uu][Ee])
+        # we do nothing here cuz the default is empty!!!
+        ;;
+    [Nn][Oo]|[Nn]|0|[Ff][Aa][Ll][Ss][Ee]|*)
+        wppv_arg="-n"
+        ;;
+esac
+
 choose_wal() {
     start_ueberzug
     SHELL="${BASH_BINARY}" \
     selection=$(find -L "$dir" -maxdepth 1 -type f -print | is_img_extension | sort -V | \
     fzf --ansi --keep-right --header "wal-choose: choose wallpaper from files in $dir" \
-    --preview "wal --backend $backend_sel --cols16 $colsmethod -i {} -n -q; wal --preview \
+    --preview "wal --backend $backend_sel --cols16 $colsmethod -i {} $wppv_arg -q; wal --preview \
     | sed -n '2,$ p'; awk '{print \$2,\$3,\$4,\$5,\$6,\$7}'; \
     [[ \$(file --mime {}) =~ svg ]] && svg_preview {} || draw_preview {}" \
     --preview-window "${DEFAULT_PREVIEW_POSITION}" \
