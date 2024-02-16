@@ -281,7 +281,13 @@ dir=""
 if [ -z "$1" ]; then
     dir="$PWD"
 else
-    dir="$1"
+    if [ -d "$1" ]; then
+        dir="$1"
+    else
+        prettyp "$myname" "no valid directory provided"
+        prettyp "$myname" "using" "$PWD"
+        dir="$PWD"
+    fi
 fi
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
