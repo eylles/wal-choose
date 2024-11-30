@@ -243,6 +243,7 @@ backend_colorthief=""
 backend_colorz=""
 backend_fast_colorthief=""
 backend_modern_colorthief=""
+backend_okthief=""
 backend_haishoku=""
 backend_list='wal'
 
@@ -266,6 +267,10 @@ backend_fast_colorthief=$?
 import_test "modern_colorthief"
 backend_modern_colorthief=$?
 [ "$backend_modern_colorthief" = 0 ] && backend_list="${backend_list}"' modern_colorthief'
+
+which okthief >/dev/null
+backend_okthief=$?
+[ "$backend_okthief" = 0 ] && backend_list="${backend_list}"' okthief'
 
 import_test "haishoku.haishoku" "Haishoku"
 backend_haishoku=$?
