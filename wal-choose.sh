@@ -27,6 +27,7 @@ declare -r -x DEFAULT_PREVIEW_POSITION="right"
 declare -r -x UEBERZUG_FIFO="$(mktemp --dry-run --suffix "fzf-$$-ueberzug")"
 declare -r -x PREVIEW_ID="preview"
 
+export UEBERZUG_FIFO
 
 function start_ueberzug {
     if [ ! -p "${UEBERZUG_FIFO}" ]; then
@@ -329,9 +330,9 @@ choose_wal() {
     SHELL="${BASH_BINARY}" \
     selection=$(find -L "$dir" -maxdepth 1 -type f -print | is_img_extension | sort -V | \
     fzf --ansi --keep-right --header "wal-choose: choose wallpaper from files in $dir" \
-    --preview "wal --backend $backend_sel --cols16 $colsmethod -i {} $wppv_arg -q; wal --preview \
+    --preview "echo 'using backend: '$backend_sel ; wal --backend $backend_sel --cols16 $colsmethod -i {} $wppv_arg -q; wal --preview \
     | sed -n '2,$ p'; awk '{print \$2,\$3,\$4,\$5,\$6,\$7}'; \
-    [[ \$(file --mime {}) =~ svg ]] && svg_preview {} || draw_preview {}" \
+    wal-preview {}" \
     --preview-window "${DEFAULT_PREVIEW_POSITION}" \
     --bind "${REDRAW_KEY}:${REDRAW_COMMAND}")
     kill "$ueberzug_pid"
@@ -361,5 +362,5 @@ if [ -z "$selection" ]; then
     $wal_thm_cmd "${lasttheme}"
 else
     prettyp "$myname" "selected image" "${selection}"
-    $wal_img_cmd "${selection}"
+    $wal_img_cmd "${selection}" --backend "$backend_sel"
 fi
