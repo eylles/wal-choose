@@ -330,9 +330,7 @@ choose_wal() {
     SHELL="${BASH_BINARY}" \
     selection=$(find -L "$dir" -maxdepth 1 -type f -print | is_img_extension | sort -V | \
     fzf --ansi --keep-right --header "wal-choose: choose wallpaper from files in $dir" \
-    --preview "echo 'using backend: '$backend_sel ; wal --backend $backend_sel --cols16 $colsmethod -i {} $wppv_arg -q; wal --preview \
-    | sed -n '2,$ p'; awk '{print \$2,\$3,\$4,\$5,\$6,\$7}'; \
-    wal-preview {}" \
+    --preview "@lib@/wal-preview {1} $backend_sel $colsmethod $wppv_arg" \
     --preview-window "${DEFAULT_PREVIEW_POSITION}" \
     --bind "${REDRAW_KEY}:${REDRAW_COMMAND}")
     kill "$ueberzug_pid"
