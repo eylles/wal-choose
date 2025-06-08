@@ -1,5 +1,5 @@
 .POSIX:
-PREFIX = ~/.local
+PREFIX = ${HOME}/.local
 .PHONY: install uninstall cronadd
 install:
 	@chmod 755 wal-choose
