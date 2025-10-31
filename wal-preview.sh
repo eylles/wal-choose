@@ -62,7 +62,7 @@ colsmethod="$3"
 wppv="$4"
 
 echo "Using Backend: $backend"
-wal --backend $backend --cols16 $colsmethod -i $image $wppv -q
+wal --backend $backend --cols16 $colsmethod -i "$image" $wppv -q
 wal --preview | sed -n '3,$ p'
 # awk '{print \$2,\$3,\$4,\$5,\$6,\$7}'
-draw_preview "$1"
+draw_preview "$image"
