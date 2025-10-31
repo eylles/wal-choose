@@ -61,7 +61,7 @@ backend="$2"
 colsmethod="$3"
 wppv="$4"
 
-echo "Using Backend: $backend"
+echo "Using Backend: $backend    Cols Method: $colsmethod"
 wal --backend $backend --cols16 $colsmethod -i "$image" $wppv -q
 wal --preview | sed -n '3,$ p'
 # awk '{print \$2,\$3,\$4,\$5,\$6,\$7}'
